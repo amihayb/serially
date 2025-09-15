@@ -15,6 +15,8 @@ class SerialRecorder {
         this.serialOutput = document.getElementById('serialOutput');
         this.connectionStatus = document.getElementById('connectionStatus');
         this.statusText = document.getElementById('statusText');
+        this.addCarriageReturn = document.getElementById('addCarriageReturn');
+        this.addLineFeed = document.getElementById('addLineFeed');
 
         // Serial Port State
         this.port = null;
@@ -294,14 +296,25 @@ class SerialRecorder {
         if (!text) return;
         
         try {
-            // Encode text as UTF-8 and add newline
-            const data = this.encoder.encode(text + '\n');
+            // Build the message with optional \r and \n based on checkbox states
+            let message = text;
+            
+            if (this.addCarriageReturn.checked) {
+                message += '\r';
+            }
+            
+            if (this.addLineFeed.checked) {
+                message += '\n';
+            }
+            
+            // Encode text as UTF-8
+            const data = this.encoder.encode(message);
             await this.writer.write(data);
             
             // Clear input
             this.sendInput.value = '';
             
-            console.log(`Sent: ${text}`);
+            console.log(`Sent: ${text}${this.addCarriageReturn.checked ? '\\r' : ''}${this.addLineFeed.checked ? '\\n' : ''}`);
             
         } catch (error) {
             console.error('Send error:', error);
