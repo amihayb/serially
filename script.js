@@ -31,6 +31,11 @@ class SerialRecorder {
         this.decoder = new TextDecoder('utf-8');
         this.encoder = new TextEncoder();
 
+        // Send History
+        this.sendHistory = [];
+        this.historyIndex = -1;
+        this.tempInput = null;
+
         // UI Update Throttling
         this.updateInterval = null;
         this.lastUpdateTime = 0;
@@ -59,6 +64,15 @@ class SerialRecorder {
         this.sendInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.sendData();
+            }
+        });
+        this.sendInput.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                this.navigateHistory(-1);
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                this.navigateHistory(1);
             }
         });
 
@@ -311,6 +325,16 @@ class SerialRecorder {
             const data = this.encoder.encode(message);
             await this.writer.write(data);
             
+            // Add to history (avoid duplicates if same as last entry)
+            if (this.sendHistory.length === 0 || this.sendHistory[this.sendHistory.length - 1] !== text) {
+                this.sendHistory.push(text);
+                // Keep only last 50 entries
+                if (this.sendHistory.length > 50) {
+                    this.sendHistory.shift();
+                }
+            }
+            this.historyIndex = -1; // Reset to end of history
+            
             // Clear input
             this.sendInput.value = '';
             
@@ -320,6 +344,48 @@ class SerialRecorder {
             console.error('Send error:', error);
             alert('Failed to send data. Please check connection.');
         }
+    }
+
+    /**
+     * Navigate through send history
+     * @param {number} direction - -1 for up (previous), 1 for down (next)
+     */
+    navigateHistory(direction) {
+        if (this.sendHistory.length === 0) return;
+        
+        if (this.historyIndex === -1) {
+            // Store current input if navigating from the end
+            const currentText = this.sendInput.value.trim();
+            if (currentText && (this.sendHistory.length === 0 || this.sendHistory[this.sendHistory.length - 1] !== currentText)) {
+                // Current text is not in history, we'll restore it when going back down
+                this.tempInput = currentText;
+            }
+        }
+        
+        if (direction === -1) {
+            // Arrow Up - go to previous entry
+            if (this.historyIndex === -1) {
+                this.historyIndex = this.sendHistory.length - 1;
+            } else if (this.historyIndex > 0) {
+                this.historyIndex--;
+            }
+        } else {
+            // Arrow Down - go to next entry
+            if (this.historyIndex === -1) {
+                return; // Already at the end
+            } else if (this.historyIndex < this.sendHistory.length - 1) {
+                this.historyIndex++;
+            } else {
+                // Reached the end, restore temp input or clear
+                this.historyIndex = -1;
+                this.sendInput.value = this.tempInput || '';
+                this.tempInput = null;
+                return;
+            }
+        }
+        
+        // Set the input value to the history entry
+        this.sendInput.value = this.sendHistory[this.historyIndex];
     }
 
     /**
