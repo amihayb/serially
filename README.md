@@ -146,7 +146,7 @@ The modular design makes it easy to extend functionality:
 
 ## License
 
-This project is open source and available under the MIT License.
+This project is open source and available under the Apache License.
 
 ## Support
 
