@@ -131,6 +131,8 @@ body {
     box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
 }
 
+
+
 .btn-icon {
     font-size: 1.1rem;
 }
@@ -306,8 +308,47 @@ body {
 .send-options {
     padding: 0 1.5rem 1.5rem 1.5rem;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.send-options-checkboxes {
+    display: flex;
     gap: 1.5rem;
     flex-wrap: wrap;
+    align-items: center;
+}
+
+.send-options-raw-btns {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+.btn-raw {
+    background: transparent;
+    color: #138496;
+    border: 1px solid #138496;
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    padding: 3px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-raw:hover:not(:disabled) {
+    background: rgba(23, 162, 184, 0.12);
+    color: #0f6674;
+    border-color: #0f6674;
+}
+
+.btn-raw:disabled {
+    color: #adb5bd;
+    border-color: #ced4da;
+    cursor: not-allowed;
 }
 
 .checkbox-label {

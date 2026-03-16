@@ -10,7 +10,10 @@ class SerialRecorder {
         this.baudRateSelect = document.getElementById('baudRateSelect');
         this.recordBtn = document.getElementById('recordBtn');
         this.saveBtn = document.getElementById('saveBtn');
+        this.clearBtn = document.getElementById('clearBtn');
         this.sendBtn = document.getElementById('sendBtn');
+        this.sendCR = document.getElementById('sendCR');
+        this.sendLF = document.getElementById('sendLF');
         this.sendInput = document.getElementById('sendInput');
         this.serialOutput = document.getElementById('serialOutput');
         this.connectionStatus = document.getElementById('connectionStatus');
@@ -59,8 +62,13 @@ class SerialRecorder {
         // Save button
         this.saveBtn.addEventListener('click', () => this.saveRecording());
 
+        // Clear serial monitor
+        this.clearBtn.addEventListener('click', () => { this.serialOutput.value = ''; });
+
         // Send button and input
         this.sendBtn.addEventListener('click', () => this.sendData());
+        this.sendCR.addEventListener('click', () => this.sendRaw('\r'));
+        this.sendLF.addEventListener('click', () => this.sendRaw('\n'));
         this.sendInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 this.sendData();
@@ -347,6 +355,21 @@ class SerialRecorder {
     }
 
     /**
+     * Send a raw character (e.g. '\r' or '\n') immediately
+     */
+    async sendRaw(char) {
+        if (!this.isConnected || !this.writer) return;
+        try {
+            await this.writer.write(this.encoder.encode(char));
+            const label = char === '\r' ? '\\r' : '\\n';
+            console.log(`Sent raw: ${label}`);
+        } catch (error) {
+            console.error('Send error:', error);
+            alert('Failed to send data. Please check connection.');
+        }
+    }
+
+    /**
      * Navigate through send history
      * @param {number} direction - -1 for up (previous), 1 for down (next)
      */
@@ -473,6 +496,8 @@ class SerialRecorder {
         
         // Send controls
         this.sendBtn.disabled = !this.isConnected;
+        this.sendCR.disabled = !this.isConnected;
+        this.sendLF.disabled = !this.isConnected;
         this.sendInput.disabled = !this.isConnected;
         
         // Baud rate select
