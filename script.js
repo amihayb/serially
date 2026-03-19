@@ -3,6 +3,45 @@
  * Web Serial API implementation for browser-based serial communication
  */
 
+// ── Theme Toggle ──────────────────────────────────────────────────────────────
+
+function updateThemeIcon(theme) {
+    const icon = document.getElementById('theme-icon');
+    if (!icon) return;
+    icon.className = theme === 'dark' ? 'fa fa-moon-o' : 'fa fa-sun-o';
+}
+
+function toggleTheme() {
+    const html = document.documentElement;
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('serially-theme', 'light');
+        updateThemeIcon('light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('serially-theme', 'dark');
+        updateThemeIcon('dark');
+    }
+}
+
+window.toggleTheme = toggleTheme;
+
+window.about = function () {
+    Swal.fire({
+      title: "Serially<br>Communication Recorder",
+      html: "A web-based app for communicating with serial devices, recording binary data streams, and monitoring live messages.<br><br>For support, contact me:<br><br> Amihay Blau <br> mail: amihay@blaurobotics.co.il <br> Phone: +972-54-6668902",
+      icon: "info"
+    });
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+    const savedTheme = localStorage.getItem('serially-theme') || 'dark';
+    updateThemeIcon(savedTheme);
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 class SerialRecorder {
     constructor() {
         // DOM Elements
@@ -267,16 +306,8 @@ class SerialRecorder {
             const decodedText = this.decoder.decode(combinedData, { stream: true });
             
             if (decodedText) {
-                // Add to existing text
-                const currentText = this.serialOutput.value;
-                const newText = currentText + decodedText;
-                
-                // Keep only last 10 lines
-                const lines = newText.split('\n');
-                const lastLines = lines.slice(-10);
-                const finalText = lastLines.join('\n');
-                
-                this.serialOutput.value = finalText;
+                // Append to existing text
+                this.serialOutput.value += decodedText;
                 this.serialOutput.scrollTop = this.serialOutput.scrollHeight;
             }
             

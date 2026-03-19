@@ -5,7 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Serial Communication Recorder - Blau Robotics</title>
     <link rel="icon" href="assets/logo-blau-robotics.ico" />
+    <link rel="stylesheet" href="vendor/font-awesome.min.css">
     <link rel="stylesheet" href="styles.css">
+    <script>
+        (function () {
+            var theme = localStorage.getItem('serially-theme') || 'dark';
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <!-- Open Graph / Social Media -->
     <meta property="og:title" content="Serially - Communication Recorder" />
     <meta property="og:description" content="A web-based app for communicating with serial devices, recording binary data streams, and monitoring live messages." />
@@ -40,8 +49,11 @@
             <h1 class="app-name">Serially - Communication Recorder</h1>
         </div>
         <div class="header-right">
+            <button id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle dark/light mode">
+                <i class="fa fa-moon-o" id="theme-icon"></i>
+            </button>
             <div class="logo">
-                <img src="assets/logo-title.svg" alt="Blau Robotics Logo" height="42">
+                <img src="assets/logo-title.svg" alt="Blau Robotics Logo" height="42" onclick="about()" style="cursor:pointer;" title="About">
             </div>
         </div>
     </header>
@@ -108,6 +120,8 @@
         </div>
     </main>
 
+    <script src="vendor/plotly-latest.min.js"></script>
+    <script src="vendor/sweetalert2@11.js"></script>
     <script src="script.js"></script>
 </body>
 </html> 

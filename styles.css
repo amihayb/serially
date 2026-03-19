@@ -5,22 +5,81 @@
     box-sizing: border-box;
 }
 
+/* ── Theme Variables ─────────────────────────────── */
+:root {
+    --color-app-bg: #f7faff;
+    --color-panel-bg: #ffffff;
+    --color-header-bg: linear-gradient(135deg, #ffffff 0%, #f7faff 100%);
+    --color-section-header-bg: linear-gradient(135deg, #f7faff 0%, #ebf0f8 100%);
+    --color-text-primary: #344563;
+    --color-text-active: #202124;
+    --color-text-muted: #6c757d;
+    --color-border: #ccc;
+    --color-border-dark: #dee2e6;
+    --color-input-bg: #ffffff;
+    --color-input-text: #344563;
+    --color-textarea-bg: #f7faff;
+    --color-textarea-text: #344563;
+    --color-shadow: rgba(0, 0, 0, 0.1);
+    --color-raw-btn: #138496;
+    --color-raw-btn-hover-bg: rgba(23, 162, 184, 0.12);
+    --color-raw-btn-hover: #0f6674;
+    --color-raw-btn-hover-border: #0f6674;
+    --color-raw-btn-disabled: #adb5bd;
+    --color-raw-btn-disabled-border: #ced4da;
+    --color-checkbox-label: #495057;
+    --color-scrollbar-track: #f1f1f1;
+    --color-scrollbar-thumb: #c1c1c1;
+    --color-scrollbar-thumb-hover: #a8a8a8;
+    --color-btn-hover-tint: #c9dbf9;
+}
+
+[data-theme="dark"] {
+    --color-app-bg: #0e1520;
+    --color-panel-bg: #131d2e;
+    --color-header-bg: linear-gradient(135deg, #1a2535 0%, #131d2e 100%);
+    --color-section-header-bg: linear-gradient(135deg, #1a2535 0%, #131d2e 100%);
+    --color-text-primary: #c8d8f0;
+    --color-text-active: #e0eeff;
+    --color-text-muted: #5c6e8a;
+    --color-border: #1e2d44;
+    --color-border-dark: #1e2d44;
+    --color-input-bg: #131d2e;
+    --color-input-text: #c8d8f0;
+    --color-textarea-bg: #0e1520;
+    --color-textarea-text: #c8d8f0;
+    --color-shadow: rgba(0, 0, 0, 0.35);
+    --color-raw-btn: #7eb8e8;
+    --color-raw-btn-hover-bg: rgba(126, 184, 232, 0.15);
+    --color-raw-btn-hover: #a8d4f5;
+    --color-raw-btn-hover-border: #a8d4f5;
+    --color-raw-btn-disabled: #3d4f63;
+    --color-raw-btn-disabled-border: #2c3e54;
+    --color-checkbox-label: #c8d8f0;
+    --color-scrollbar-track: #1a2535;
+    --color-scrollbar-thumb: #2c4168;
+    --color-scrollbar-thumb-hover: #3d5a8a;
+    --color-btn-hover-tint: #2c4168;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background-color: #f8f9fa;
-    color: #333;
+    background-color: var(--color-app-bg);
+    color: var(--color-text-primary);
     line-height: 1.6;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 /* Header Styles */
 .header {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    border-bottom: 1px solid #e9ecef;
+    background: var(--color-header-bg);
+    border-bottom: 1px solid var(--color-border);
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px var(--color-shadow);
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .header-left {
@@ -44,7 +103,7 @@ body {
 .app-name {
     font-size: 1.3rem;
     font-weight: 600;
-    color: #495057;
+    color: var(--color-text-active);
     letter-spacing: 0.3px;
     text-align: center;
     margin: 0;
@@ -54,6 +113,33 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
+}
+
+/* Theme Toggle Button */
+#theme-toggle-btn {
+    background: none;
+    border: none;
+    color: var(--color-text-primary);
+    padding: 10px 12px;
+    font-size: 1.15rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+#theme-toggle-btn:hover {
+    background-color: var(--color-btn-hover-tint);
+    color: var(--color-text-active);
+}
+
+#theme-icon {
+    display: block;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+#theme-toggle-btn:active #theme-icon {
+    opacity: 0.6;
+    transform: rotate(30deg);
 }
 
 /* Button Styles */
@@ -131,8 +217,6 @@ body {
     box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
 }
 
-
-
 .btn-icon {
     font-size: 1.1rem;
 }
@@ -140,12 +224,12 @@ body {
 /* Baud Rate Select */
 .baud-rate-select {
     padding: 0.75rem 1rem;
-    border: 2px solid #e9ecef;
+    border: 2px solid var(--color-border);
     border-radius: 8px;
     font-size: 0.9rem;
     font-weight: 600;
-    background: white;
-    color: #333;
+    background: var(--color-input-bg);
+    color: var(--color-input-text);
     cursor: pointer;
     transition: all 0.2s ease;
     min-width: 120px;
@@ -181,24 +265,26 @@ body {
 
 /* Serial Section */
 .serial-section {
-    background: white;
+    background: var(--color-panel-bg);
     border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px var(--color-shadow);
     margin-bottom: 2rem;
     overflow: hidden;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .serial-header {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: var(--color-section-header-bg);
     padding: 1rem 1.5rem;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid var(--color-border-dark);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .serial-header h3 {
-    color: #495057;
+    color: var(--color-text-active);
     font-weight: 600;
     margin: 0;
 }
@@ -235,17 +321,18 @@ body {
 #serialOutput {
     width: 100%;
     height: 300px;
-    border: 2px solid #e9ecef;
+    border: 2px solid var(--color-border);
     border-radius: 8px;
     padding: 1rem;
     font-family: 'Courier New', monospace;
     font-size: 0.9rem;
     line-height: 1.5;
-    background: #f8f9fa;
-    color: #495057;
+    background: var(--color-textarea-bg);
+    color: var(--color-textarea-text);
     resize: vertical;
     min-height: 200px;
     max-height: 500px;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 #serialOutput:focus {
@@ -256,20 +343,22 @@ body {
 
 /* Send Section */
 .send-section {
-    background: white;
+    background: var(--color-panel-bg);
     border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px var(--color-shadow);
     overflow: hidden;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .send-header {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: var(--color-section-header-bg);
     padding: 1rem 1.5rem;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid var(--color-border-dark);
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .send-header h3 {
-    color: #495057;
+    color: var(--color-text-active);
     font-weight: 600;
     margin: 0;
 }
@@ -284,11 +373,11 @@ body {
 #sendInput {
     flex: 1;
     padding: 0.75rem 1rem;
-    border: 2px solid #e9ecef;
+    border: 2px solid var(--color-border);
     border-radius: 8px;
     font-size: 0.9rem;
-    background: white;
-    color: #333;
+    background: var(--color-input-bg);
+    color: var(--color-input-text);
     transition: all 0.2s ease;
 }
 
@@ -299,8 +388,8 @@ body {
 }
 
 #sendInput:disabled {
-    background: #f8f9fa;
-    color: #6c757d;
+    background: var(--color-textarea-bg);
+    color: var(--color-text-muted);
     cursor: not-allowed;
 }
 
@@ -329,26 +418,27 @@ body {
 
 .btn-raw {
     background: transparent;
-    color: #138496;
-    border: 1px solid #138496;
+    color: var(--color-raw-btn);
+    border: 1px solid var(--color-raw-btn);
     font-family: 'Courier New', monospace;
     font-size: 0.78rem;
     padding: 3px 10px;
     border-radius: 4px;
     cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+    min-width: auto;
+    font-weight: 500;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 
 .btn-raw:hover:not(:disabled) {
-    background: rgba(23, 162, 184, 0.12);
-    color: #0f6674;
-    border-color: #0f6674;
+    background: var(--color-raw-btn-hover-bg);
+    color: var(--color-raw-btn-hover);
+    border-color: var(--color-raw-btn-hover-border);
 }
 
 .btn-raw:disabled {
-    color: #adb5bd;
-    border-color: #ced4da;
     cursor: not-allowed;
+    opacity: 0.45;
 }
 
 .checkbox-label {
@@ -358,7 +448,7 @@ body {
     cursor: pointer;
     font-size: 0.9rem;
     font-weight: 500;
-    color: #495057;
+    color: var(--color-checkbox-label);
     user-select: none;
 }
 
@@ -430,15 +520,15 @@ body {
 }
 
 #serialOutput::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: var(--color-scrollbar-track);
     border-radius: 4px;
 }
 
 #serialOutput::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
+    background: var(--color-scrollbar-thumb);
     border-radius: 4px;
 }
 
 #serialOutput::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
-} 
+    background: var(--color-scrollbar-thumb-hover);
+}
